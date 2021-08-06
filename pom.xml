@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.5.3</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+    <groupId>com.kim.security.aries</groupId>
+    <artifactId>aries</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>aries</name>
+    <description>Demo project for Spring Boot</description>
+
+    <properties>
+        <java.version>1.8</java.version>
+
+        <!--Spring druid,mysql and tk.mybatis,pagehelper begin -->
+        <spring-boot-alibaba-druid.version>1.1.21</spring-boot-alibaba-druid.version>
+        <spring-boot-mysql.version>5.1.28</spring-boot-mysql.version>
+        <spring-boot-tkmybatis.version>2.0.2</spring-boot-tkmybatis.version>
+        <spring-boot-pagehelper.version>1.2.5</spring-boot-pagehelper.version>
+        <spring-boot-mybatisplus.version>3.4.2</spring-boot-mybatisplus.version>
+        <!--Spring druid,mysql and tk.mybatis ,pagehelper end -->
+
+        <!--简化代码 begin-->
+        <spring-boot-lombok.version>1.18.10</spring-boot-lombok.version>
+        <spring-boot-google-guava.version>28.2-jre</spring-boot-google-guava.version>
+        <!--简化代码 end-->
+
+        <!--jwt begin-->
+        <spring-boot-jwt.version>0.9.1</spring-boot-jwt.version>
+        <!--jwt end-->
+
+        <!--工具类hutool  begin-->
+        <spring-boot-hutool.version>5.7.5</spring-boot-hutool.version>
+        <!--工具类hutool  end-->
+
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+
+        <!--Spring druid,mysql and tk.mybatis,pagehelper begin -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-starter</artifactId>
+            <version>${spring-boot-alibaba-druid.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${spring-boot-mysql.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>${spring-boot-mybatisplus.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+        <!--Spring mysql and tk.mybatis,pagehelper end -->
+
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>${spring-boot-jwt.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>${spring-boot-hutool.version}</version>
+        </dependency>
+
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
