@@ -29,7 +29,7 @@ public class DataResult implements Serializable {
     }
 
     public static DataResult successWithData(Object data){
-        return new DataResult(ResultStatus.SUCCESS,SUCCESS_RESULT,null,null,null);
+        return new DataResult(ResultStatus.SUCCESS,SUCCESS_RESULT,null,data,null);
     }
 
     public static DataResult success(String message,Object data){

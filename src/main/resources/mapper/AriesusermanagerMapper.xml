@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kim.security.aries.mapper.AriesusermanagerMapper">
+  <resultMap id="BaseResultMap" type="com.kim.security.aries.model.Ariesusermanager">
+    <!--@mbg.generated-->
+    <!--@Table ariesusermanager-->
+    <id column="userid" jdbcType="INTEGER" property="userid" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="avatar" jdbcType="VARCHAR" property="avatar" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="stauts" jdbcType="INTEGER" property="stauts" />
+    <result column="version" jdbcType="INTEGER" property="version" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    userid, username, phone, `password`, avatar, email, stauts, version, create_time, 
+    update_time
+  </sql>
+
+  <select id="authLogin" resultMap="BaseResultMap">
+    select userid, username, phone, password, avatar, email, stauts, version, create_time, update_time from ariesusermanager where phone = #{phone}
+    and password = #{password} and stauts = 1
+  </select>
+</mapper>
