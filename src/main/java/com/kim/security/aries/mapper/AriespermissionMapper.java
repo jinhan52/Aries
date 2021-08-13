@@ -26,4 +26,9 @@ public interface AriespermissionMapper extends BaseMapper<Ariespermission> {
     List<Ariespermission> initMenuParentData();
 
     void eiditorMenu(Ariespermission ariespermission);
+
+    List<Ariespermission> getRolePermission(Integer roleid);
+
+    List<Ariespermission> getAllPermission();
+
 }

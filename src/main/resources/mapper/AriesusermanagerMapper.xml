@@ -15,6 +15,23 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
+
+
+  <resultMap id="BaseResultMapWithRoles" type="com.kim.security.aries.model.Ariesusermanager">
+    <!--@mbg.generated-->
+    <!--@Table ariesusermanager-->
+    <id column="userid" jdbcType="INTEGER" property="userid" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="avatar" jdbcType="VARCHAR" property="avatar" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="stauts" jdbcType="INTEGER" property="stauts" />
+    <result column="version" jdbcType="INTEGER" property="version" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <collection property="allRolesList" select="com.kim.security.aries.mapper.AriesrolesMapper.getRoleListByUserId" column="userid" ofType="com.kim.security.aries.model.Ariesroles"></collection>
+  </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
     userid, username, phone, `password`, avatar, email, stauts, version, create_time, 
@@ -25,4 +42,47 @@
     select userid, username, phone, password, avatar, email, stauts, version, create_time, update_time from ariesusermanager where phone = #{phone}
     and password = #{password} and stauts = 1
   </select>
+
+  <select id="initUsersData" resultMap="BaseResultMapWithRoles">
+    select <include refid="Base_Column_List"> </include> from ariesusermanager
+    <where>
+      <if test="search != null and search != ''">
+        username like concat('%',#{search},'%')
+      </if>
+    </where>
+    limit #{currentPage},#{pageSize}
+  </select>
+
+  <select id="initUsersCount" resultType="int">
+    select count(1) from ariesusermanager
+    <where>
+      <if test="search != null and search != ''">
+        username like concat('%',#{search},'%')
+      </if>
+    </where>
+  </select>
+
+  <insert id="insertNewUser" keyProperty="userid" useGeneratedKeys="true">
+    insert into ariesusermanager(username, phone, password, avatar
+    <if test="email != null and email != ''">
+      ,email
+    </if>
+    )
+      values (#{username},#{phone},#{password},#{avatar}
+    <if test="email != null and email != ''">
+      ,#{email}
+    </if>
+    )
+  </insert>
+
+  <insert id="insertUserRoles">
+    insert into ariesuserroles(userid, roleid)values
+    <foreach collection="roles" item="role" separator=",">
+      (#{userId},#{role})
+    </foreach>
+  </insert>
+
+  <delete id="deleteUserRole">
+    delete from ariesuserroles where userid = #{userId}
+  </delete>
 </mapper>

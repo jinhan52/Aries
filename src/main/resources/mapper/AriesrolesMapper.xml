@@ -10,8 +10,63 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
+
+  <resultMap id="BaseResultMapWithPermission" type="com.kim.security.aries.model.Ariesroles">
+    <!--@mbg.generated-->
+    <!--@Table ariesroles-->
+    <id column="roleid" jdbcType="INTEGER" property="roleid" />
+    <result column="rolename" jdbcType="VARCHAR" property="rolename" />
+    <result column="stauts" jdbcType="INTEGER" property="stauts" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <collection property="allPermission" column="roleid" select="com.kim.security.aries.mapper.AriespermissionMapper.getRolePermission" ofType="com.kim.security.aries.model.Ariespermission"></collection>
+  </resultMap>
+
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
     roleid, rolename, stauts, create_time, update_time
   </sql>
+
+
+  <select id="getAllRoles" resultMap="BaseResultMapWithPermission">
+    select <include refid="Base_Column_List">
+  </include> from ariesroles
+    <where>
+      <if test="search != null and search != ''">
+        rolename like concat('%',#{search},'%')
+      </if>
+    </where>
+    limit #{currentPage},#{pageSize}
+  </select>
+
+  <select id="getRolesCount" resultType="java.lang.Integer">
+    select count(1) from ariesroles
+    <where>
+      <if test="search != null and search != ''">
+        rolename like concat('%',#{search},'%')
+      </if>
+    </where>
+  </select>
+
+  <insert id="insertRoleWithId" useGeneratedKeys="true" keyProperty="roleid">
+    insert into ariesroles(rolename) values (#{rolename})
+  </insert>
+
+  <insert id="insertRolePermission">
+    insert into ariesrolespermission(roleid, permissionid) VALUES
+    <foreach item="permissionid" collection="permissions" separator=",">
+      (#{roleid},#{permissionid})
+    </foreach>
+  </insert>
+
+  <delete id="removeAllPermission">
+    delete from ariesrolespermission where roleid = #{roleid}
+  </delete>
+
+  <select id="getRoleListByUserId" resultMap="BaseResultMap">
+    select a2.* from ariesusermanager um
+    left join ariesuserroles a on um.userid = a.userid
+    left join ariesroles a2 on a.roleid = a2.roleid
+    where um.userid =#{userid}
+  </select>
 </mapper>

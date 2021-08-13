@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+
 import lombok.Data;
 
 @Data
@@ -25,6 +27,9 @@ public class Ariesroles implements Serializable {
 
     @TableField(value = "update_time")
     private Date updateTime;
+
+    @TableField(exist = false)
+    List<Ariespermission> allPermission;
 
     private static final long serialVersionUID = 1L;
 

@@ -47,7 +47,7 @@
     permissionid, parentid, menu, menuName, menuBaseUrl, create_time, update_time, menuIcon
   </sql>
 
-  <select id="getUsersAllPermission" resultMap="BaseResultMap">
+  <select id="getUsersAllPermission" resultMap="BaseResultMapWithChildren">
     SELECT
             ap.*
     FROM
@@ -116,4 +116,17 @@
 
         where permissionid = #{permissionid}
     </update>
+
+    <select id="getRolePermission" resultMap="BaseResultMap">
+        select ap.* from ariesroles ar
+        LEFT JOIN ariesrolespermission rp on ar.roleid = rp.roleid
+        LEFT JOIN ariespermission ap on rp.permissionid = ap.permissionid
+        where ar.roleid = #{roleid}
+    </select>
+
+    <select id="getAllPermission" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"></include> from ariespermission
+        where parentid = 0
+    </select>
+
 </mapper>
