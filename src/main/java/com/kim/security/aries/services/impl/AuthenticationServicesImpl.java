@@ -4,10 +4,10 @@ import cn.hutool.core.collection.ListUtil;
 import cn.hutool.crypto.SecureUtil;
 import cn.hutool.json.JSONObject;
 import com.kim.security.aries.common.DataResult;
-import com.kim.security.aries.mapper.AriespermissionMapper;
-import com.kim.security.aries.mapper.AriesusermanagerMapper;
-import com.kim.security.aries.model.Ariespermission;
-import com.kim.security.aries.model.Ariesusermanager;
+import com.kim.security.aries.mapper.PermissionMapper;
+import com.kim.security.aries.mapper.UsermanagerMapper;
+import com.kim.security.aries.model.Permission;
+import com.kim.security.aries.model.Usermanager;
 import com.kim.security.aries.services.AuthenticationServices;
 import com.kim.security.aries.tools.JwtTools;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,25 +22,25 @@ import java.util.Map;
 public class AuthenticationServicesImpl implements AuthenticationServices {
 
     @Autowired
-    AriesusermanagerMapper usermanagerMapper;
+    UsermanagerMapper usermanagerMapper;
 
     @Autowired
-    AriespermissionMapper ariespermissionMapper;
+    PermissionMapper permissionMapper;
 
     @Override
     public DataResult authLogin(JSONObject jsonObject) {
 
         String password = SecureUtil.md5(SecureUtil.md5(jsonObject.getStr("password")));
-        Ariesusermanager ariesusermanager = usermanagerMapper.authLogin(jsonObject.getStr("phone"), password);
+        Usermanager ariesusermanager = usermanagerMapper.authLogin(jsonObject.getStr("phone"), password);
         if (ariesusermanager==null){
             return DataResult.failure("您的账号密码有误!请重新输入!");
         }else{
             //获取该用户所有的权限
-            List<Ariespermission> usersAllPermission = ariespermissionMapper.getUsersAllPermission(ariesusermanager.getUserid());
+            List<Permission> usersAllPermission = permissionMapper.getUsersAllPermission(ariesusermanager.getUserid());
             boolean isadmin = false;
 
-            for (Ariespermission ariespermission : usersAllPermission) {
-                if (ariespermission.getPermissionid()==1){
+            for (Permission permission : usersAllPermission) {
+                if (permission.getPermissionid()==1){
                     isadmin = true;
                 }
             }
@@ -49,9 +49,9 @@ public class AuthenticationServicesImpl implements AuthenticationServices {
 
             if (isadmin){
                 auths = ListUtil.list(false,"/");
-                usersAllPermission = ariespermissionMapper.getAllMenus();
+                usersAllPermission = permissionMapper.getAllMenus();
             }else{
-                for (Ariespermission ariespermission : usersAllPermission) {
+                for (Permission ariespermission : usersAllPermission) {
                     auths.add(ariespermission.getMenubaseurl());
                 }
             }

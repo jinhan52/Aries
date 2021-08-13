@@ -5,12 +5,14 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
-import java.util.Date;import java.util.List;
+import java.util.Date;
+import java.util.List;
+
 import lombok.Data;
 
 @Data
-@TableName(value = "ariespermission")
-public class Ariespermission implements Serializable {
+@TableName(value = "permission")
+public class Permission implements Serializable {
     @TableId(value = "permissionid", type = IdType.INPUT)
     private Integer permissionid;
 
@@ -52,8 +54,9 @@ public class Ariespermission implements Serializable {
     public static final String COL_UPDATE_TIME = "update_time";
 
     public static final String COL_MENUICON = "menuIcon";
+
     @TableField(exist = false)
-    private List<Ariespermission> children;
+    private List<Permission> children;
     @TableField(exist = false)
-    private Ariespermission parent;
+    private Permission parent;
 }

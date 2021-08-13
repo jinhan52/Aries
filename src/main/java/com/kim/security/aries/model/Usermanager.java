@@ -8,12 +8,11 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 @Data
-@TableName(value = "ariesusermanager")
-public class Ariesusermanager implements Serializable {
+@TableName(value = "usermanager")
+public class Usermanager implements Serializable {
     @TableId(value = "userid", type = IdType.INPUT)
     private Integer userid;
 
@@ -24,7 +23,6 @@ public class Ariesusermanager implements Serializable {
     private String phone;
 
     @TableField(value = "`password`")
-    @JsonIgnore
     private String password;
 
     @TableField(value = "avatar")
@@ -37,7 +35,6 @@ public class Ariesusermanager implements Serializable {
     private Integer stauts;
 
     @TableField(value = "version")
-    @JsonIgnore
     private Integer version;
 
     @TableField(value = "create_time")
@@ -47,7 +44,7 @@ public class Ariesusermanager implements Serializable {
     private Date updateTime;
 
     @TableField(exist = false)
-    public List<Ariesroles> allRolesList;
+    public List<Roles> allRolesList;
 
     private static final long serialVersionUID = 1L;
 

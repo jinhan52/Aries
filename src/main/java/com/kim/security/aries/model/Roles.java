@@ -11,8 +11,8 @@ import java.util.List;
 import lombok.Data;
 
 @Data
-@TableName(value = "ariesroles")
-public class Ariesroles implements Serializable {
+@TableName(value = "roles")
+public class Roles implements Serializable {
     @TableId(value = "roleid", type = IdType.INPUT)
     private Integer roleid;
 
@@ -29,7 +29,7 @@ public class Ariesroles implements Serializable {
     private Date updateTime;
 
     @TableField(exist = false)
-    List<Ariespermission> allPermission;
+    List<Permission> allPermission;
 
     private static final long serialVersionUID = 1L;
 

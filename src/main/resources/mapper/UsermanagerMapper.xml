@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.kim.security.aries.mapper.AriesusermanagerMapper">
-  <resultMap id="BaseResultMap" type="com.kim.security.aries.model.Ariesusermanager">
+<mapper namespace="com.kim.security.aries.mapper.UsermanagerMapper">
+  <resultMap id="BaseResultMap" type="com.kim.security.aries.model.Usermanager">
     <!--@mbg.generated-->
-    <!--@Table ariesusermanager-->
+    <!--@Table usermanager-->
     <id column="userid" jdbcType="INTEGER" property="userid" />
     <result column="username" jdbcType="VARCHAR" property="username" />
     <result column="phone" jdbcType="VARCHAR" property="phone" />
@@ -17,9 +17,9 @@
   </resultMap>
 
 
-  <resultMap id="BaseResultMapWithRoles" type="com.kim.security.aries.model.Ariesusermanager">
+  <resultMap id="BaseResultMapWithRoles" type="com.kim.security.aries.model.Usermanager">
     <!--@mbg.generated-->
-    <!--@Table ariesusermanager-->
+    <!--@Table usermanager-->
     <id column="userid" jdbcType="INTEGER" property="userid" />
     <result column="username" jdbcType="VARCHAR" property="username" />
     <result column="phone" jdbcType="VARCHAR" property="phone" />
@@ -30,21 +30,21 @@
     <result column="version" jdbcType="INTEGER" property="version" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    <collection property="allRolesList" select="com.kim.security.aries.mapper.AriesrolesMapper.getRoleListByUserId" column="userid" ofType="com.kim.security.aries.model.Ariesroles"></collection>
+    <collection property="allRolesList" select="com.kim.security.aries.mapper.RolesMapper.getRoleListByUserId" column="userid" ofType="com.kim.security.aries.model.Roles"></collection>
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    userid, username, phone, `password`, avatar, email, stauts, version, create_time, 
+    userid, username, phone, `password`, avatar, email, stauts, version, create_time,
     update_time
   </sql>
 
   <select id="authLogin" resultMap="BaseResultMap">
-    select userid, username, phone, password, avatar, email, stauts, version, create_time, update_time from ariesusermanager where phone = #{phone}
+    select userid, username, phone, password, avatar, email, stauts, version, create_time, update_time from usermanager where phone = #{phone}
     and password = #{password} and stauts = 1
   </select>
 
   <select id="initUsersData" resultMap="BaseResultMapWithRoles">
-    select <include refid="Base_Column_List"> </include> from ariesusermanager
+    select <include refid="Base_Column_List"> </include> from usermanager
     <where>
       <if test="search != null and search != ''">
         username like concat('%',#{search},'%')
@@ -54,7 +54,7 @@
   </select>
 
   <select id="initUsersCount" resultType="int">
-    select count(1) from ariesusermanager
+    select count(1) from usermanager
     <where>
       <if test="search != null and search != ''">
         username like concat('%',#{search},'%')
@@ -63,12 +63,12 @@
   </select>
 
   <insert id="insertNewUser" keyProperty="userid" useGeneratedKeys="true">
-    insert into ariesusermanager(username, phone, password, avatar
+    insert into usermanager(username, phone, password, avatar
     <if test="email != null and email != ''">
       ,email
     </if>
     )
-      values (#{username},#{phone},#{password},#{avatar}
+    values (#{username},#{phone},#{password},#{avatar}
     <if test="email != null and email != ''">
       ,#{email}
     </if>
@@ -76,13 +76,13 @@
   </insert>
 
   <insert id="insertUserRoles">
-    insert into ariesuserroles(userid, roleid)values
+    insert into userroles(userid, roleid)values
     <foreach collection="roles" item="role" separator=",">
       (#{userId},#{role})
     </foreach>
   </insert>
 
   <delete id="deleteUserRole">
-    delete from ariesuserroles where userid = #{userId}
+    delete from userroles where userid = #{userId}
   </delete>
 </mapper>

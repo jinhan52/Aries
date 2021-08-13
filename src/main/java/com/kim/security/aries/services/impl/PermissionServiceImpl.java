@@ -4,61 +4,59 @@ import cn.hutool.json.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.kim.security.aries.common.DataResult;
 import org.springframework.stereotype.Service;
-import javax.annotation.Resource;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.kim.security.aries.mapper.AriespermissionMapper;
-import com.kim.security.aries.model.Ariespermission;
-import com.kim.security.aries.services.AriespermissionService;
-
+import com.kim.security.aries.mapper.PermissionMapper;
+import com.kim.security.aries.model.Permission;
+import com.kim.security.aries.services.PermissionService;
 @Service
-public class AriespermissionServiceImpl extends ServiceImpl<AriespermissionMapper, Ariespermission> implements AriespermissionService {
-
+public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permission> implements PermissionService{
     @Override
     public DataResult initMenuData(Integer currentPage, Integer pageSize) {
         currentPage = (currentPage - 1) * pageSize;
-        List<Ariespermission> ariespermissions = baseMapper.initMenuData(currentPage, pageSize);
+        List<Permission> permissions = baseMapper.initMenuData(currentPage, pageSize);
 
         Integer count = baseMapper.selectCount(null);
         Map<String, Object> resultmap = new HashMap<>();
         resultmap.put("count",count);
-        resultmap.put("data",ariespermissions);
+        resultmap.put("data",permissions);
         return DataResult.successWithData(resultmap);
     }
 
     @Override
     public DataResult initMenuDataWithSearch(Integer currentPage, Integer pageSize, String search) {
         currentPage = (currentPage - 1) * pageSize;
-        List<Ariespermission> ariespermissions = baseMapper.initMenuDataWithSearch(currentPage, pageSize,search);
+        List<Permission> permissions = baseMapper.initMenuDataWithSearch(currentPage, pageSize,search);
 
         Integer count = baseMapper.selectCountWithSearch(search);
         Map<String, Object> resultmap = new HashMap<>();
         resultmap.put("count",count);
-        resultmap.put("data",ariespermissions);
+        resultmap.put("data",permissions);
         return DataResult.successWithData(resultmap);
     }
 
     @Override
     public DataResult initMenuParentData() {
-        List<Ariespermission> ariespermissions = baseMapper.initMenuParentData();
-        return DataResult.successWithData(ariespermissions);
+        List<Permission> permissions = baseMapper.initMenuParentData();
+        return DataResult.successWithData(permissions);
     }
 
     @Override
     public DataResult addNewMenu(JSONObject jsonObject) {
         System.out.println(jsonObject.toString());
-        Ariespermission ariespermission = jsonObject.toBean(Ariespermission.class);
-        baseMapper.insert(ariespermission);
-        List<Ariespermission> allMenus = baseMapper.getAllMenus();
+        Permission permission = jsonObject.toBean(Permission.class);
+        baseMapper.insert(permission);
+        List<Permission> allMenus = baseMapper.getAllMenus();
         return DataResult.successWithData(allMenus);
     }
 
     @Override
     public DataResult eiditorMenu(JSONObject jsonObject) {
-        Ariespermission ariespermission = jsonObject.toBean(Ariespermission.class);
+        Permission ariespermission = jsonObject.toBean(Permission.class);
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("parentid",ariespermission.getPermissionid());
         Integer count = baseMapper.selectCount(queryWrapper);
@@ -68,7 +66,7 @@ public class AriespermissionServiceImpl extends ServiceImpl<AriespermissionMappe
         }
 
         baseMapper.eiditorMenu(ariespermission);
-        List<Ariespermission> allMenus = baseMapper.getAllMenus();
+        List<Permission> allMenus = baseMapper.getAllMenus();
         return DataResult.successWithData(allMenus);
     }
 
@@ -88,8 +86,7 @@ public class AriespermissionServiceImpl extends ServiceImpl<AriespermissionMappe
 
         baseMapper.deleteById(permissionid);
 
-        List<Ariespermission> allMenus = baseMapper.getAllMenus();
+        List<Permission> allMenus = baseMapper.getAllMenus();
         return DataResult.successWithData(allMenus);
     }
 }
-

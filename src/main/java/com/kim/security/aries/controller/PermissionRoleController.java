@@ -2,7 +2,7 @@ package com.kim.security.aries.controller;
 
 import cn.hutool.json.JSONObject;
 import com.kim.security.aries.common.DataResult;
-import com.kim.security.aries.services.AriesrolesService;
+import com.kim.security.aries.services.RolesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("permission/role")
 public class PermissionRoleController {
     @Autowired
-    AriesrolesService ariesrolesService;
+    RolesService rolesService;
 
     @GetMapping("getAllRoles")
     public DataResult getAllRoles(
@@ -18,26 +18,26 @@ public class PermissionRoleController {
             @RequestParam(value = "pageSize",required = false,defaultValue = "10") Integer pageSize,
             @RequestParam(value = "search",required = false,defaultValue = "") String search
     ){
-        return ariesrolesService.getAllRoles(currentPage,pageSize,search);
+        return rolesService.getAllRoles(currentPage,pageSize,search);
     }
 
     @GetMapping("getAllPermission")
     public DataResult getAllPermission(){
-        return ariesrolesService.getAllPermission();
+        return rolesService.getAllPermission();
     }
 
     @PostMapping("addRolePermission")
     public DataResult addRolePermission(@RequestBody JSONObject jsonObject){
-        return ariesrolesService.addRolePermission(jsonObject);
+        return rolesService.addRolePermission(jsonObject);
     }
 
     @PostMapping("updateRolePermission")
     public DataResult updateRolePermission(@RequestBody JSONObject jsonObject){
-        return ariesrolesService.updateRolePermission(jsonObject);
+        return rolesService.updateRolePermission(jsonObject);
     }
 
     @PostMapping("deleteRolePermission")
     public DataResult deleteRolePermission(@RequestBody JSONObject jsonObject){
-        return ariesrolesService.deleteRolePermission(jsonObject);
+        return rolesService.deleteRolePermission(jsonObject);
     }
 }

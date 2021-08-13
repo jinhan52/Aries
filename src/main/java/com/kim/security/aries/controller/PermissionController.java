@@ -2,7 +2,7 @@ package com.kim.security.aries.controller;
 
 import cn.hutool.json.JSONObject;
 import com.kim.security.aries.common.DataResult;
-import com.kim.security.aries.services.AriespermissionService;
+import com.kim.security.aries.services.PermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.*;
 public class PermissionController {
 
     @Autowired
-    AriespermissionService ariespermissionService;
+    PermissionService permissionService;
 
     @GetMapping("initMenuData")
     public DataResult initMenuData(
             @RequestParam(value = "currentPage",required = false,defaultValue = "1") Integer currentPage,
             @RequestParam(value = "pageSize",required = false,defaultValue = "10") Integer pageSize){
-        return ariespermissionService.initMenuData(currentPage,pageSize);
+        return permissionService.initMenuData(currentPage,pageSize);
     }
 
     @GetMapping("initMenuDataWithSearch")
@@ -25,26 +25,26 @@ public class PermissionController {
             @RequestParam(value = "currentPage",required = false,defaultValue = "1") Integer currentPage,
             @RequestParam(value = "pageSize",required = false,defaultValue = "10") Integer pageSize,
             @RequestParam(value = "search",required = false) String search){
-        return ariespermissionService.initMenuDataWithSearch(currentPage,pageSize,search);
+        return permissionService.initMenuDataWithSearch(currentPage,pageSize,search);
     }
 
 
     @GetMapping("initMenuParentData")
     public DataResult initMenuParentData(){
-        return ariespermissionService.initMenuParentData();
+        return permissionService.initMenuParentData();
     }
 
     @PostMapping("addNewMenu")
     public DataResult addNewMenu(@RequestBody JSONObject jsonObject){
-        return ariespermissionService.addNewMenu(jsonObject);
+        return permissionService.addNewMenu(jsonObject);
     }
 
     @PostMapping("eiditorMenu")
     public DataResult eiditorMenu(@RequestBody JSONObject jsonObject){
-        return ariespermissionService.eiditorMenu(jsonObject);
+        return permissionService.eiditorMenu(jsonObject);
     }
     @PostMapping("deleteMenu")
     public DataResult deleteMenu(@RequestBody JSONObject jsonObject){
-        return ariespermissionService.deleteMenu(jsonObject);
+        return permissionService.deleteMenu(jsonObject);
     }
 }

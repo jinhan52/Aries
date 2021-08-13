@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.kim.security.aries.mapper.AriesrolesMapper">
-  <resultMap id="BaseResultMap" type="com.kim.security.aries.model.Ariesroles">
+<mapper namespace="com.kim.security.aries.mapper.RolesMapper">
+  <resultMap id="BaseResultMap" type="com.kim.security.aries.model.Roles">
     <!--@mbg.generated-->
-    <!--@Table ariesroles-->
+    <!--@Table roles-->
     <id column="roleid" jdbcType="INTEGER" property="roleid" />
     <result column="rolename" jdbcType="VARCHAR" property="rolename" />
     <result column="stauts" jdbcType="INTEGER" property="stauts" />
@@ -11,15 +11,15 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
 
-  <resultMap id="BaseResultMapWithPermission" type="com.kim.security.aries.model.Ariesroles">
+  <resultMap id="BaseResultMapWithPermission" type="com.kim.security.aries.model.Roles">
     <!--@mbg.generated-->
-    <!--@Table ariesroles-->
+    <!--@Table roles-->
     <id column="roleid" jdbcType="INTEGER" property="roleid" />
     <result column="rolename" jdbcType="VARCHAR" property="rolename" />
     <result column="stauts" jdbcType="INTEGER" property="stauts" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    <collection property="allPermission" column="roleid" select="com.kim.security.aries.mapper.AriespermissionMapper.getRolePermission" ofType="com.kim.security.aries.model.Ariespermission"></collection>
+    <collection property="allPermission" column="roleid" select="com.kim.security.aries.mapper.PermissionMapper.getRolePermission" ofType="com.kim.security.aries.model.Roles"></collection>
   </resultMap>
 
   <sql id="Base_Column_List">
@@ -30,7 +30,7 @@
 
   <select id="getAllRoles" resultMap="BaseResultMapWithPermission">
     select <include refid="Base_Column_List">
-  </include> from ariesroles
+  </include> from roles
     <where>
       <if test="search != null and search != ''">
         rolename like concat('%',#{search},'%')
@@ -40,7 +40,7 @@
   </select>
 
   <select id="getRolesCount" resultType="java.lang.Integer">
-    select count(1) from ariesroles
+    select count(1) from roles
     <where>
       <if test="search != null and search != ''">
         rolename like concat('%',#{search},'%')
@@ -49,24 +49,24 @@
   </select>
 
   <insert id="insertRoleWithId" useGeneratedKeys="true" keyProperty="roleid">
-    insert into ariesroles(rolename) values (#{rolename})
+    insert into roles(rolename) values (#{rolename})
   </insert>
 
   <insert id="insertRolePermission">
-    insert into ariesrolespermission(roleid, permissionid) VALUES
+    insert into rolespermission(roleid, permissionid) VALUES
     <foreach item="permissionid" collection="permissions" separator=",">
       (#{roleid},#{permissionid})
     </foreach>
   </insert>
 
   <delete id="removeAllPermission">
-    delete from ariesrolespermission where roleid = #{roleid}
+    delete from rolespermission where roleid = #{roleid}
   </delete>
 
   <select id="getRoleListByUserId" resultMap="BaseResultMap">
-    select a2.* from ariesusermanager um
-    left join ariesuserroles a on um.userid = a.userid
-    left join ariesroles a2 on a.roleid = a2.roleid
+    select a2.* from usermanager um
+    left join userroles a on um.userid = a.userid
+    left join roles a2 on a.roleid = a2.roleid
     where um.userid =#{userid}
   </select>
 </mapper>

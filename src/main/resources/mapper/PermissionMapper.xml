@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kim.security.aries.mapper.PermissionMapper">
+  <resultMap id="BaseResultMap" type="com.kim.security.aries.model.Permission">
+    <!--@mbg.generated-->
+    <!--@Table permission-->
+    <id column="permissionid" jdbcType="INTEGER" property="permissionid" />
+    <result column="parentid" jdbcType="INTEGER" property="parentid" />
+    <result column="menu" jdbcType="VARCHAR" property="menu" />
+    <result column="menuName" jdbcType="VARCHAR" property="menuname" />
+    <result column="menuBaseUrl" jdbcType="VARCHAR" property="menubaseurl" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="menuIcon" jdbcType="VARCHAR" property="menuicon" />
+  </resultMap>
+
+  <resultMap id="BaseResultMapWithChildren" type="com.kim.security.aries.model.Permission">
+    <!--@mbg.generated-->
+    <!--@Table permission-->
+    <id column="permissionid" jdbcType="INTEGER" property="permissionid" />
+    <result column="parentid" jdbcType="INTEGER" property="parentid" />
+    <result column="menu" jdbcType="VARCHAR" property="menu" />
+    <result column="menuName" jdbcType="VARCHAR" property="menuname" />
+    <result column="menuBaseUrl" jdbcType="VARCHAR" property="menubaseurl" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="menuIcon" jdbcType="VARCHAR" property="menuicon" />
+    <collection property="children" column="permissionid" ofType="com.kim.security.aries.model.Permission" select="getAllMenusChild"></collection>
+  </resultMap>
+
+  <resultMap id="BaseResultMapWithParent" type="com.kim.security.aries.model.Permission">
+    <!--@mbg.generated-->
+    <!--@Table permission-->
+    <id column="permissionid" jdbcType="INTEGER" property="permissionid" />
+    <result column="parentid" jdbcType="INTEGER" property="parentid" />
+    <result column="menu" jdbcType="VARCHAR" property="menu" />
+    <result column="menuName" jdbcType="VARCHAR" property="menuname" />
+    <result column="menuBaseUrl" jdbcType="VARCHAR" property="menubaseurl" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="menuIcon" jdbcType="VARCHAR" property="menuicon" />
+    <association property="parent" column="parentid" select="getMenuParent" javaType="com.kim.security.aries.model.Permission"></association>
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    permissionid, parentid, menu, menuName, menuBaseUrl, create_time, update_time, menuIcon
+  </sql>
+
+  <select id="getUsersAllPermission" resultMap="BaseResultMapWithChildren">
+    SELECT
+    ap.*
+    FROM
+    `usermanager` um
+    LEFT JOIN userroles ur on um.userid = ur.userid
+    LEFT JOIN roles ar on ur.roleid = ar.roleid
+    LEFT JOIN rolespermission rp on rp.roleid = ur.roleid
+    LEFT JOIN permission ap on ap.permissionid = rp.permissionid
+    where ap.parentid = 0
+    and um.userid = #{userid}
+  </select>
+
+  <select id="getAllMenus" resultMap="BaseResultMapWithChildren">
+    select <include refid="Base_Column_List"></include> from permission where permissionid !=1
+    and parentid = 0
+  </select>
+
+  <select id="getAllMenusChild" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"></include> from permission where parentid = #{parentId}
+  </select>
+
+  <select id="getMenuParent" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"></include>from permission where permissionid = #{parentId}
+  </select>
+
+  <select id="initMenuData" resultMap="BaseResultMapWithParent">
+    select <include refid="Base_Column_List"></include> from permission order by create_time desc limit #{currentPage},#{pageSize}
+  </select>
+
+  <select id="initMenuDataWithSearch" resultMap="BaseResultMapWithParent">
+    select <include refid="Base_Column_List"></include> from permission
+    where menuName like concat('%',#{search},'%')
+    order by create_time desc limit #{currentPage},#{pageSize}
+  </select>
+
+  <select id="selectCountWithSearch" resultType="java.lang.Integer">
+    select count(1) from permission where menuName like concat('%',#{search},'%')
+  </select>
+
+  <select id="initMenuParentData" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"></include> from permission where parentid = 0 and permissionid !=1
+  </select>
+
+  <update id="eiditorMenu" parameterType="com.kim.security.aries.model.Permission">
+    update permission
+    set menu = #{menu},
+    menuBaseUrl = #{menubaseurl},
+    <choose>
+      <when test="parentid != null">
+        parentid = #{parentid},
+      </when>
+      <otherwise>
+        parentid = 0,
+      </otherwise>
+    </choose>
+
+    <choose>
+      <when test="menuicon != null">
+        menuIcon = #{menuicon},
+      </when>
+      <otherwise>
+        menuIcon = null,
+      </otherwise>
+    </choose>
+    menuName = #{menuname}
+
+    where permissionid = #{permissionid}
+  </update>
+
+  <select id="getRolePermission" resultMap="BaseResultMap">
+    select ap.* from roles ar
+    LEFT JOIN rolespermission rp on ar.roleid = rp.roleid
+    LEFT JOIN permission ap on rp.permissionid = ap.permissionid
+    where ar.roleid = #{roleid}
+  </select>
+
+  <select id="getAllPermission" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"></include> from permission
+    where parentid = 0
+  </select>
+</mapper>
